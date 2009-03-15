@@ -23,12 +23,30 @@ window.onload = function() {
   $('cron').fireEvent('cron')
 }
 </script>
+<style type="text/css">
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+#img {
+  width:400px;
+  float:right;
+}
+textarea {
+  width:450px;
+  height: 100px;
+}
+</style>
 </head>
 <body>
-  <form>
-    <div><textarea id="cron" rows="10" cols="70">0 0 0 0 0 COMMAND</textarea></div>
-  </form>
-  <ul id="results"></ul>
-  <p><a href="test.html">tests</a>, <a href="http://github.com/technoweenie/cronwtf">code</a></p>
+  <div id="wrapper">
+    <div id="img"><img src="images/wtf.jpg" alt="WTF?" width="387" height="362" /></div>
+    <form>
+      <div>
+        <textarea id="cron">0 0 0 0 0 COMMAND</textarea>
+        <ul id="results"></ul>
+        <p><a href="test.html">tests</a>, <a href="http://github.com/technoweenie/cronwtf">code</a></p>
+      </div>
+    </form>
+  </div>
 </body>
 </html>
