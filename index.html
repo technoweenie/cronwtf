@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>CronWTF!</title>
+<script type="text/javascript" src="javascripts/cronwtf.js"></script>
+<script type="text/javascript" src="javascripts/mootools.js"></script>
+<script type="text/javascript">
+window.onload = function() {
+  $('cron').addEvents({
+    keyup: function() { this.fireEvent('cron') },
+    cron:  function() {
+      var list = $('results')
+
+      while(list.childNodes.length > 0)
+        list.removeChild(list.childNodes[0])
+
+      CronWTF.parse(this.value).each(function(entry) {
+        list.appendChild(new Element('li', {text: entry}))
+      })
+    }
+  })
+  $('cron').fireEvent('cron')
+}
+</script>
+</head>
+<body>
+  <form>
+    <div><textarea id="cron" rows="10" cols="70">0 0 0 0 0 COMMAND</textarea></div>
+  </form>
+  <ul id="results"></ul>
+  <p><a href="test.html">tests</a>, <a href="http://github.com/technoweenie/cronwtf">code</a></p>
+</body>
+</html>

@@ -27,11 +27,11 @@ describe('CronWTF.parse()', {
   },
 
   'parses seasonal cron': function() {
-    expect(CronWTF.parse("0 0 * 1,2,3,12 * foo")).should_be(["Runs `foo` at minute :00, on hour 0, every day, on months Jan, Feb, Mar, Dec, every week day."])
+    expect(CronWTF.parse("0 0 * 0,1,2,11 * foo")).should_be(["Runs `foo` at minute :00, on hour 0, every day, in Jan, Feb, Mar, Dec, every week day."])
   },
 
   'parses seasonal cron on certain week days': function() {
-    expect(CronWTF.parse("0 0 * 1,2,3,12 1,3,5 foo")).should_be(["Runs `foo` at minute :00, on hour 0, every day, on months Jan, Feb, Mar, Dec, on week days Mon, Wed, Fri."])
+    expect(CronWTF.parse("0 0 * 0,1,2,11 1,3,5 foo")).should_be(["Runs `foo` at minute :00, on hour 0, every day, in Jan, Feb, Mar, Dec, on Mon, Wed, Fri."])
   }
 })
 

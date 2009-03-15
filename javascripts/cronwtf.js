@@ -5,7 +5,9 @@ var CronWTF = {
     messages = []
     len      = lines.length
     for(i = 0; i < len; i++) {
-      messages.push(this.entry(lines[i]).message)
+      var line = lines[i]
+      if(line.length > 0)
+        messages.push(this.entry(line).message)
     }
     return messages
   },
@@ -104,25 +106,21 @@ var CronWTF = {
 
   months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
   monthsMessage: function(values) {
-    var m   = 'on month'
     var v   = []
     var len = values.length;
     for(var j = 0; j < len; j++) {
-      v.push(CronWTF.months[values[j]-1])
+      v.push(CronWTF.months[values[j]])
     }
-    if(len > 1) m += 's'
-    return m + " " + v.join(", ")
+    return "in " + v.join(", ")
   },
 
   week_days: ['Sun', 'Mon', "Tue", 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   week_daysMessage: function(values) {
-    var m   = 'on week day'
     var v   = []
     var len = values.length;
     for(var j = 0; j < len; j++) {
       v.push(CronWTF.week_days[values[j]])
     }
-    if(len > 1) m += 's'
-    return m + " " + v.join(", ")
+    return "on " + v.join(", ")
   }
 }
