@@ -1,4 +1,16 @@
 var CronWTF = {
+  // parse multiple cron lines, returns an array of messages.
+  parse: function(s) {
+    lines    = s.split("\n")
+    messages = []
+    len      = lines.length
+    for(i = 0; i < len; i++) {
+      messages.push(this.entry(lines[i]).message)
+    }
+    return messages
+  },
+
+  // parses a single cron line, returns an object
   entry: function(line) {
     pieces = line.split(/\s/)
     e = {
@@ -14,13 +26,13 @@ var CronWTF = {
   },
 
   // parses an individual time attribute into an array of numbers.
-  // *     - every increment (returns 0)
+  // *     - every increment (returns '*')
   // \d+   - that value
   // 1,2,3 - those values
   // 1-3   - range of values
   // */3   - steps
   parseAttribute: function(value, upperBound) {
-    if(value == '*') return 0;
+    if(value == '*') return value;
 
     if(value.match(/^\*\/\d+$/)) {
       step  = parseInt(value.match(/^\*\/(\d+)$/)[1])
@@ -45,14 +57,72 @@ var CronWTF = {
     return value.split(",")
   },
 
+  // on minute :00, every hour, on months July, August, every week day
   generateMessage: function(entry) {
-    var timeMsg;
-    if(entry.minutes == 0) {
-      timeMsg = 'every minute'
-    } else {
-      //alert(entry.minutes)
-      timeMsg = 'every hour'
+    var attribs   = ['minute', 'hour', 'day', 'month', 'week_day']
+    var attribLen = attribs.length;
+    var msg       = []
+    for(var i = 0; i < attribLen; i++) {
+      var key    = attribs[i] + 's'
+      var prev   = msg[msg.length -1]
+      var values = entry[key]
+      if(values == '*') {
+        if(!prev || !prev.match(/^every/))
+          msg.push("every " + attribs[i].replace('_', ' '))
+      } else {
+        func = this[key + 'Message']
+        if(func) msg.push(func(values))
+      }
     }
-    return "Runs `" + entry.command + "`" + timeMsg + "."
+    return "Runs `" + entry.command + "` " + msg.join(", ") + "."
+  },
+
+  minutesMessage: function(values) {
+    var m   = 'at minute'
+    var v   = []
+    var len = values.length;
+    for(var j = 0; j < len; j++) {
+      num = values[j].toString();
+      if(num.length == 1) num = "0" + num
+      v.push(":" + num)
+    }
+    if(len > 1) m += 's'
+    return m + " " + v.join(", ")
+  },
+
+  hoursMessage: function(values) {
+    var m = 'on hour'
+    if(values.length > 1) m += 's'
+    return m + " " + values.join(", ")
+  },
+
+  daysMessage: function(values) {
+    var m = 'on day'
+    if(values.length > 1) m += 's'
+    return m + " " + values.join(", ")
+  },
+
+  months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  monthsMessage: function(values) {
+    var m   = 'on month'
+    var v   = []
+    var len = values.length;
+    for(var j = 0; j < len; j++) {
+      v.push(CronWTF.months[values[j]-1])
+    }
+    if(len > 1) m += 's'
+    return m + " " + v.join(", ")
+  },
+
+  week_days: ['Sun', 'Mon', "Tue", 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  week_daysMessage: function(values) {
+    var m   = 'on week day'
+    var v   = []
+    var len = values.length;
+    for(var j = 0; j < len; j++) {
+      v.push(CronWTF.week_days[values[j]])
+    }
+    if(len > 1) m += 's'
+    return m + " " + v.join(", ")
   }
 }

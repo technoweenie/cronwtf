@@ -9,13 +9,39 @@
 <script type="text/javascript" src="javascripts/jsspec.js"></script>
 <script type="text/javascript">// <![CDATA[
 
+describe('CronWTF.parse()', {
+  'parses multiple cron lines': function() {
+    expect(CronWTF.parse("* * * * * foo\n* * * * * bar")).should_be(["Runs `foo` every minute.", "Runs `bar` every minute."])
+  },
+
+  'parses 10 minute cron': function() {
+    expect(CronWTF.parse("*/10 * * * * foo")).should_be(["Runs `foo` at minutes :00, :10, :20, :30, :40, :50, every hour."])
+  },
+
+  'parses 6 hour cron': function() {
+    expect(CronWTF.parse("0 */6 * * * foo")).should_be(["Runs `foo` at minute :00, on hours 0, 6, 12, 18, every day."])
+  },
+
+  'parses bi-daily cron': function() {
+    expect(CronWTF.parse("0 0 */10 * * foo")).should_be(["Runs `foo` at minute :00, on hour 0, on days 0, 10, 20, 30, every month."])
+  },
+
+  'parses seasonal cron': function() {
+    expect(CronWTF.parse("0 0 * 1,2,3,12 * foo")).should_be(["Runs `foo` at minute :00, on hour 0, every day, on months Jan, Feb, Mar, Dec, every week day."])
+  },
+
+  'parses seasonal cron on certain week days': function() {
+    expect(CronWTF.parse("0 0 * 1,2,3,12 1,3,5 foo")).should_be(["Runs `foo` at minute :00, on hour 0, every day, on months Jan, Feb, Mar, Dec, on week days Mon, Wed, Fri."])
+  }
+})
+
 describe('CronWTF.entry()', {
   'parses command': function() {
     expect(CronWTF.entry("1 1,2 3-4 */5 * foo bar baz > wat").command).should_be('foo bar baz > wat')
   },
 
   'parses infinite minutes': function() {
-    expect(CronWTF.entry("* * * *  * foo").minutes).should_be(0)
+    expect(CronWTF.entry("* * * *  * foo").minutes).should_be('*')
   },
   
   'parses minute': function() {
@@ -35,7 +61,7 @@ describe('CronWTF.entry()', {
   },
 
   'parses infinite hours': function() {
-    expect(CronWTF.entry("1 * * *  * foo").hours).should_be(0)
+    expect(CronWTF.entry("1 * * *  * foo").hours).should_be('*')
   },
   
   'parses hour': function() {
@@ -55,7 +81,7 @@ describe('CronWTF.entry()', {
   },
 
   'parses infinite days': function() {
-    expect(CronWTF.entry("1 2 * *  * foo").days).should_be(0)
+    expect(CronWTF.entry("1 2 * *  * foo").days).should_be('*')
   },
   
   'parses day': function() {
@@ -75,7 +101,7 @@ describe('CronWTF.entry()', {
   },
 
   'parses infinite months': function() {
-    expect(CronWTF.entry("1 2 3 *  * foo").months).should_be(0)
+    expect(CronWTF.entry("1 2 3 *  * foo").months).should_be('*')
   },
   
   'parses month': function() {
@@ -95,7 +121,7 @@ describe('CronWTF.entry()', {
   },
 
   'parses infinite week_days': function() {
-    expect(CronWTF.entry("1 2 3 4 * foo").week_days).should_be(0)
+    expect(CronWTF.entry("1 2 3 4 * foo").week_days).should_be('*')
   },
   
   'parses week_day': function() {
