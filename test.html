@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>CrontWTF: JSSpec results</title>
+<link rel="stylesheet" type="text/css" href="stylesheets/jsspec.css" />
+<script type="text/javascript" src="javascripts/cronwtf.js"></script>
+<script type="text/javascript" src="javascripts/diff_match_patch.js"></script>
+<script type="text/javascript" src="javascripts/jsspec.js"></script>
+<script type="text/javascript">// <![CDATA[
+
+describe('CronWTF.entry()', {
+  'parses command': function() {
+    expect(CronWTF.entry("1 1,2 3-4 */5 * foo bar baz > wat").command).should_be('foo bar baz > wat')
+  },
+
+  'parses infinite minutes': function() {
+    expect(CronWTF.entry("* * * *  * foo").minutes).should_be(0)
+  },
+  
+  'parses minute': function() {
+    expect(CronWTF.entry("1 * * *  * bar").minutes).should_be([1])
+  },
+  
+  'parses minute list': function() {
+    expect(CronWTF.entry("1,2 * * *  * bar").minutes).should_be([1,2])
+  },
+  
+  'parses minute range': function() {
+    expect(CronWTF.entry("1-5 * * *  * bar").minutes).should_be([1,2,3,4,5])
+  },
+  
+  'parses minute step': function() {
+    expect(CronWTF.entry("*/10 * * *  * bar").minutes).should_be([0,10,20,30,40,50])
+  },
+
+  'parses infinite hours': function() {
+    expect(CronWTF.entry("1 * * *  * foo").hours).should_be(0)
+  },
+  
+  'parses hour': function() {
+    expect(CronWTF.entry("2 1 * *  * bar").hours).should_be([1])
+  },
+  
+  'parses hour list': function() {
+    expect(CronWTF.entry("1 1,2 * *  * bar").hours).should_be([1,2])
+  },
+  
+  'parses hour range': function() {
+    expect(CronWTF.entry("1 1-5 * *  * bar").hours).should_be([1,2,3,4,5])
+  },
+  
+  'parses hour step': function() {
+    expect(CronWTF.entry("1 */3 *  * bar").hours).should_be([0,3,6,9,12,15,18,21])
+  },
+
+  'parses infinite days': function() {
+    expect(CronWTF.entry("1 2 * *  * foo").days).should_be(0)
+  },
+  
+  'parses day': function() {
+    expect(CronWTF.entry("2 2 1 *  * bar").days).should_be([1])
+  },
+  
+  'parses day list': function() {
+    expect(CronWTF.entry("1 1 1,2 *  * bar").days).should_be([1,2])
+  },
+  
+  'parses day range': function() {
+    expect(CronWTF.entry("1 1 1-5 *  * bar").days).should_be([1,2,3,4,5])
+  },
+  
+  'parses day step': function() {
+    expect(CronWTF.entry("1 1 */3 *  * bar").days).should_be([0,3,6,9,12,15,18,21,24,27,30])
+  },
+
+  'parses infinite months': function() {
+    expect(CronWTF.entry("1 2 3 *  * foo").months).should_be(0)
+  },
+  
+  'parses month': function() {
+    expect(CronWTF.entry("2 2 2 1  * bar").months).should_be([1])
+  },
+  
+  'parses month list': function() {
+    expect(CronWTF.entry("1 1 1 1,2  * bar").months).should_be([1,2])
+  },
+  
+  'parses month range': function() {
+    expect(CronWTF.entry("1 1 1 1-5  * bar").months).should_be([1,2,3,4,5])
+  },
+  
+  'parses month step': function() {
+    expect(CronWTF.entry("1 1 1 */3  * bar").months).should_be([0,3,6,9])
+  },
+
+  'parses infinite week_days': function() {
+    expect(CronWTF.entry("1 2 3 4 * foo").week_days).should_be(0)
+  },
+  
+  'parses week_day': function() {
+    expect(CronWTF.entry("2 2 2 2 1 bar").week_days).should_be([1])
+  },
+  
+  'parses week_day list': function() {
+    expect(CronWTF.entry("1 1 1 1 1,2 bar").week_days).should_be([1,2])
+  },
+  
+  'parses week_day range': function() {
+    expect(CronWTF.entry("1 1 1 1 1-5 bar").week_days).should_be([1,2,3,4,5])
+  },
+  
+  'parses week_day step': function() {
+    expect(CronWTF.entry("1 1 1 1 */3 bar").week_days).should_be([0,3,6])
+  }
+})
+// ]]></script>
+</head>
+<body><div style="display:none;"><p>A</p><p>B</p></div></body>
+</html>
