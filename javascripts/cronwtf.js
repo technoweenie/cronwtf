@@ -6,7 +6,7 @@ var CronWTF = {
     len      = lines.length
     for(i = 0; i < len; i++) {
       var line = lines[i]
-      if(line.length > 0)
+      if(line.length > 0 && !line.match(/^#/))
         messages.push(this.entry(line).message)
     }
     return messages

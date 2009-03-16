@@ -18,6 +18,10 @@ describe('CronWTF.parse()', {
     expect(CronWTF.parse("\n 	*   * 	* * * foo	 \n\n")).should_be(["Runs `foo` every minute."])
   },
 
+  'ignores comments': function() {
+    expect(CronWTF.parse("# mm hh jj MMM JJJ")).should_be([])
+  },
+
   'parses 10 minute cron': function() {
     expect(CronWTF.parse("*/10 * * * * foo")).should_be(["Runs `foo` at minutes :00, :10, :20, :30, :40, :50, every hour."])
   },
