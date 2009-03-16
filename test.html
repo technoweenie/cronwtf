@@ -14,6 +14,10 @@ describe('CronWTF.parse()', {
     expect(CronWTF.parse("* * * * * foo\n* * * * * bar")).should_be(["Runs `foo` every minute.", "Runs `bar` every minute."])
   },
 
+  'parses mixed whitespace': function() {
+    expect(CronWTF.parse("\n 	*   * 	* * * foo	 \n\n")).should_be(["Runs `foo` every minute."])
+  },
+
   'parses 10 minute cron': function() {
     expect(CronWTF.parse("*/10 * * * * foo")).should_be(["Runs `foo` at minutes :00, :10, :20, :30, :40, :50, every hour."])
   },

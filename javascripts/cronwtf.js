@@ -14,7 +14,7 @@ var CronWTF = {
 
   // parses a single cron line, returns an object
   entry: function(line) {
-    pieces = line.split(/\s/)
+    pieces = line.replace(/^\s+|\s+$/g, '').split(/\s+/)
     e = {
       minutes:   this.parseAttribute(pieces[0], 60),
       hours:     this.parseAttribute(pieces[1], 24),
