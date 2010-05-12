@@ -39,8 +39,8 @@ var CronWTF = {
     if(value.match(/^\*\/\d+$/)) {
       step  = parseInt(value.match(/^\*\/(\d+)$/)[1])
       range = []
-      for(i = 0; i < upperBound; i++) {
-        if(i % step == 0) range.push(i)
+      for(i = 0; i < upperBound; i += step) {
+        range.push(i)
       }
       return range
     } 
