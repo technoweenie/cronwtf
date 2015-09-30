@@ -39,12 +39,12 @@ var CronWTF = {
     if(value.match(/^\*\/\d+$/)) {
       step  = parseInt(value.match(/^\*\/(\d+)$/)[1])
       range = []
-      for(i = 0; i < upperBound; i++) {
-        if(i % step == 0) range.push(i)
+      for(i = 0; i < upperBound; i += step) {
+        range.push(i)
       }
       return range
-    } 
-    
+    }
+
     if(value.match(/^\d+\-\d+$/)) {
       matches = value.match(/^(\d+)\-(\d+)$/)
       lower   = parseInt(matches[1])
@@ -104,7 +104,7 @@ var CronWTF = {
     return m + " " + values.join(", ")
   },
 
-  months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  months: [, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
   monthsMessage: function(values) {
     var v   = []
     var len = values.length;
