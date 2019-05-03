@@ -73,13 +73,13 @@ var CronWTF = {
           msg.push("every " + attribs[i].replace('_', ' '))
       } else {
         func = this[key + 'Message']
-        if(func) msg.push(func(values))
+        if(func) msg.push(func(entry, values))
       }
     }
     return "Runs `" + entry.command + "` " + msg.join(", ") + "."
   },
 
-  minutesMessage: function(values) {
+  minutesMessage: function(entry, values) {
     var m   = 'at minute'
     var v   = []
     var len = values.length;
@@ -92,20 +92,20 @@ var CronWTF = {
     return m + " " + v.join(", ")
   },
 
-  hoursMessage: function(values) {
+  hoursMessage: function(entry, values) {
     var m = 'on hour'
     if(values.length > 1) m += 's'
     return m + " " + values.join(", ")
   },
 
-  daysMessage: function(values) {
+  daysMessage: function(entry, values) {
     var m = 'on day'
     if(values.length > 1) m += 's'
     return m + " " + values.join(", ")
   },
 
   months: [, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  monthsMessage: function(values) {
+  monthsMessage: function(entry, values) {
     var v   = []
     var len = values.length;
     for(var j = 0; j < len; j++) {
@@ -115,12 +115,13 @@ var CronWTF = {
   },
 
   week_days: ['Sun', 'Mon', "Tue", 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  week_daysMessage: function(values) {
+  week_daysMessage: function(entry, values) {
     var v   = []
     var len = values.length;
     for(var j = 0; j < len; j++) {
       v.push(CronWTF.week_days[values[j]])
     }
-    return "on " + v.join(", ")
+    prefix = entry.days == '*' ? 'on ' : 'plus on '
+    return prefix + v.join(', ')
   }
 }

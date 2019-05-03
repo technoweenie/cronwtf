@@ -34,6 +34,10 @@ describe('CronWTF.parse()', {
     expect(CronWTF.parse("0 0 */10 * * foo")).should_be(["Runs `foo` at minute :00, on hour 0, on days 0, 10, 20, 30, every month."])
   },
 
+  'parses day-of-month + weekday cron': function() {
+    expect(CronWTF.parse("30 4 1,15 * 5 foo")).should_be(["Runs `foo` at minute :30, on hour 4, on days 1, 15, every month, plus on Fri."])
+  },
+
   'parses seasonal cron': function() {
     expect(CronWTF.parse("0 0 * 1,2,3,12 * foo")).should_be(["Runs `foo` at minute :00, on hour 0, every day, in Jan, Feb, Mar, Dec, every week day."])
   },
